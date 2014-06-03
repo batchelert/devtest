@@ -1,575 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <link rel="shortcut icon" href="startup/flat-ui/images/favicon.ico">
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ExerciseTracker</title>
+	
+	<script type="text/javascript" src="cordova-1.7.0.js"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDD353fOPh-KBUQ-2ekPCg75uxXRn0D9Tk&sensor=false"></script>
+	<script type="text/javascript" src="json2.js"></script>
+	<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="jquery.mobile-1.1.0.min.js"></script>
+    <script type="text/javascript" src="exercisetracker.js"></script>
+	<link rel="stylesheet" href="jquery.mobile-1.1.0.min.css" />
+	
+</head>
+<body>
+<!-- Start of Home page -->
+<div data-role="page" id="home">
+
+	<div data-role="header">
+	
+		<h1>Home</h1>
+	
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#home" data-transition="none" data-icon="home">Home</a></li>
+				<li><a href="#startTracking" data-transition="none" data-icon="plus">Track Workout</a></li>
+				<li><a href="#history" data-transition="none" data-icon="star">History</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">
+		<p>Welcome to the <em>ExerciseTracker</em> app. By clicking <em>Track Workout</em> you can record your workouts using the GPS feature on your phone. Learn how to build this app by reading <em>mobile.tutsplus.com</em>.</p>
+	
+		<button id="home_network_button" data-icon="check">Internet Access Enabled</button>
+		<button id="home_clearstorage_button">Clear local storage</button>
+		<button id="home_seedgps_button">Load Seed GPS Data</button>
+	</div>
+
+
+</div>
+<!-- End of Home page -->
+
+<!-- Start of Trackwork Out page -->
+<div data-role="page" id="startTracking">
+
+	<div data-role="header">
+		<h1>Track Workout</h1>
+		
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#home" data-transition="none" data-icon="home">Home</a></li>
+				<li><a href="#startTracking" data-transition="none" data-icon="plus">Track Workout</a></li>
+				<li><a href="#history" data-transition="none" data-icon="star">History</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">	
+		<p id="startTracking_status"></p>
+			<div data-role="fieldcontain" class="ui-hide-label">
+				<label for="track_id">Track ID/Name:</label>
+				<input type="text" name="track_id" id="track_id" placeholder="Workout ID/Name"/>
+			</div>
+
+		<button data-role="button" id="startTracking_start">Start Tracking</button>
+		<button data-role="button" id="startTracking_stop">Stop Tracking</button>  
+		
+				<p id="startTracking_info"></p>
+		
+		
+	</div>
+
+
+</div><!-- /page -->
+
+<!-- Start of the History page -->
+<div data-role="page" id="history">
+
+    <div data-role="header">
+        <h1>History</h1>
         
-        <link rel="stylesheet" href="startup/flat-ui/bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="startup/flat-ui/css/flat-ui.css">
-        <!-- Using only with Flat-UI (free)-->
-        <link rel="stylesheet" href="startup/common-files/css/icon-font.css">
-        <!-- end -->
-        <link rel="stylesheet" href="startup/common-files/css/animations.css">
-        <link rel="stylesheet" href="static/css/style.css">
-        
-        <link rel="stylesheet" href="static/nivo/nivo-lightbox.css" type="text/css" />
-		<link rel="stylesheet" href="static/nivo/themes/default/default.css" type="text/css" />
-        
-        <title>Hope Emerges</title>
-        <meta name="p:domain_verify" content="dbb5479de8a45c1f72b7ba297195124c"/>
-        
-        <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-6036010-4', 'hopeemerges.co.nz');
-  ga('require', 'displayfeatures');
-  ga('send', 'pageview');
-
-</script>
-
-        
-    </head>
-
-    <body>
-    
-
-    
-    
-        <div class="page-wrapper"><header class="header-23">
-    <div class="mask">&nbsp;</div>
-    <div class="popup-video">
-        <iframe id="pPlayer" src="http://player.vimeo.com/video/80282064?title=0&amp;byline=0&amp;portrait=0&amp;api=1&amp;player_id=pPlayer" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="navbar col-sm-12 navbar-fixed-top" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle"></button>
-                </div>
-                <div class="navbar-collapse collapse">
-					<ul class="nav pull-right" style="margin-left:20px;">
-                        <li><a href="/blog" target="_blank">Blog</a></li>
-                    </ul>
-                    <ul class="nav pull-right top-menu">
-                        <li class="active"><a class="mainnav" href="#">Home</a></li>
-                        <li><a class="mainnav" href="#gallery">Gallery</a></li>
-                        <li><a class="mainnav" href="#about">About</a></li>
-                        <li><a class="mainnav" href="#events">Events</a></li>
-                        <li><a class="mainnav" href="#credits">Credits</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<section class="header-23-sub" id="topvideo">
-    <div id="bgVideo" class="background">&nbsp;</div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="hero-unit top-menu">
-                    <img src="static/img/largelogo.png" alt="Hope Emerges" />
-					<div>
-                    <span>A celebration of life after breast cancer.</span><br /><br /><br />
-                    <a href="#gallery">
-                    	<span style="font-size:15px;">Scroll down to begin.</span><br />
-						<img src="static/img/arrow-down.png" />
-                    </a>
-					</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="projects-1" id="gallery">
-    <div class="container">
-
-        <div class="head-box">
-            <div class="brand">Nic Russel</div>
-            <p>&#34;Today is about Celebrating. Celebrating life after cancer and the gifts it can bring.&#34;</p>
-            <div class="features">
-                <div>
-                   <a href="static/img/galleries/nic/photo1.jpg" class="lightbox" data-lightbox-gallery="nic">
-					   View Gallery
-                   </a>
-                </div>
-                <div>
-                <a href="http://vimeo.com/79454104" class="lightbox">
-					Watch Video
-                </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="projects">
-            <div class="project-wrapper">
-                <div class="project">
-                 <a href="static/img/galleries/rosemary/2b.jpg" class="lightbox" data-lightbox-gallery="rosemary">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/rosemarythumb.jpg" alt=""></div>
-                        <div class="overlay"><span class="fui-eye"></span></div>
-                    </div>
-                 </a>
-                    <div class="info">
-                        <div class="name">Rosemary</div>
-                        &#34;Every treatment option that I was advised to take, I took. I want to live.&#34;
-                        <br />                        <br /><br />
-						<a href="static/ajax/rosemary.html" class="lightbox" data-lightbox-type="ajax">Meet Rosemary</a>
-                        <span style="margin-left:5px; margin-right:5px">|</span>
-                        <a href="static/img/galleries/rosemary/2b.jpg" class="lightbox" data-lightbox-gallery="rosemary">View Gallery</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-wrapper">
-            
-                <div class="project">
-
-                <a href="static/img/galleries/anna/9658b.jpg" class="lightbox" data-lightbox-gallery="anna">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/annathumb.jpg" alt=""></div>
-                        <div class="overlay"><span class="fui-eye"></span></div>
-                    </div>
-                </a>
-                    <div class="info">
-                        <div class="name">Anna</div>
-                         &#34;My son made me smile when he said about my scars: &#39;Hey mum, you’ve now got a smiley face on your body.&#39;&#34;
-                          <br />                        <br />
-						  <a href="static/ajax/anna.html" class="lightbox" data-lightbox-type="ajax">Meet Anna</a>
-                        <span style="margin-left:5px; margin-right:5px">|</span>
-                        <a href="static/img/galleries/anna/9658b.jpg" class="lightbox" data-lightbox-gallery="anna">View Gallery</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-wrapper">
-            
-                <div class="project">
-                <a href="static/img/galleries/carol/0286.jpg" class="lightbox" data-lightbox-gallery="carol">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/carolthumb.jpg" alt=""></div>
-                        <div class="overlay"><span class="fui-eye"></span></div>
-                    </div>
-                </a>
-                    <div class="info">
-                        <div class="name">Carol</div>
-                        &#34;My journey has made me appreciate the little things in life.&#34;
-                         <br />                        <br /><br />
-                        <a href="static/ajax/carol.html" class="lightbox" data-lightbox-type="ajax">Meet Carol</a>
-                        <span style="margin-left:5px; margin-right:5px">|</span>
-                        <a href="static/img/galleries/carol/0286.jpg" class="lightbox" data-lightbox-gallery="carol">View Gallery</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-<a href="static/img/galleries/rosemary/3b.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/5b.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/8.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/9.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/11.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/12.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/13.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/18.jpg" data-lightbox-gallery="rosemary"></a>
-<a href="static/img/galleries/rosemary/19b.jpg" data-lightbox-gallery="rosemary"></a>
-
-<a href="static/img/galleries/nic/photo2.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo3.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo4.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo5.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo6.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo7.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo8.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo9.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo10.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo11.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo12.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo13.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo14.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo15.jpg" data-lightbox-gallery="nic"></a>
-<a href="static/img/galleries/nic/photo16.jpg" data-lightbox-gallery="nic"></a>
-
-    
-<a href="static/img/galleries/carol/0291.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0294.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0297.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0301.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0357.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0364.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0368b.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/0386b.jpg" data-lightbox-gallery="carol"></a>
-<a href="static/img/galleries/carol/9629.jpg" data-lightbox-gallery="carol"></a>
-
-
-
-<a href="static/img/galleries/anna/9714.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9725.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9755.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9763.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9785.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9787b.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9789.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9797b.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9806b.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9826b.jpg" data-lightbox-gallery="anna"></a>
-<a href="static/img/galleries/anna/9852.jpg" data-lightbox-gallery="anna"></a>    
-    
-    <!--/.container-->
-</section>
-
-
-
-
-
-
-
-
-
-<section class="content-15 v-center" id="about">
-    <div>
-
-        <div class="container">
-            <div class="row">
-                <h3 class="col-sm-10 col-sm-offset-1">Hope Emerges<br />A celebration of life after breast cancer.
-                </h3>
-            </div>
-            
-            <div class="row">
-                <div class="col-sm-6">
-                    <p>We are breast cancer survivors and we wear our scars like stars.</p>
-			
-					<p>Hope Emerges is changing the conversation around mastectomies and breast reconstruction.</p>
-			
-					<p>Changing it from one of fear and taboo, to one of empowerment.</p>
-			
-					<p>Our bodies are a beautiful thing. They give us the gift of life, but sometimes they work against us and we have tough decisions to make.</p>
-			
-			
-
-                </div>
-                <div class="col-sm-6">
-                    <p>For women facing breast cancer, the daunting decision to have a mastectomy can lead to feelings of loss, grief, insecurity and self-doubt. These can all lead to negative body image concerns and seriously impact body confidence.</p> 
-			
-					<p>It is our ambition, through the images we share here at Hope Emerges, that we will give hope and empowerment to women facing this journey and that they can love the skin they are in.</p>
-			
-					<p>Their bodies are beautiful, scars and all.</p>
-					
-					
-					
-
-                </div>
-            </div>
-			<div class="row">
-                <h3 class="col-sm-10 col-sm-offset-1"><img src="static/img/signature.jpg" style="margin-top:40px;" /></h3>
-            </div>
-            
-        </div>
-    </div>
-</section>
-
-
-<section class="content-11">
-    <div class="container">
-        <span>Help provide support and psychotherapy to families and children living with cancer.</span>
-		<p>Hope Emerges charity of choice is Kenzie&#146;s Gift, established in memory of Nic&#146;s daughter Kenzie.</p>
-        <a class="btn btn-large btn-inverse" href="https://www.givealittle.co.nz/org/kenzies/donate?wgt=true">DONATE NOW</a>
-    </div>
-</section>
-
-
-<section class="content-3" id="events">
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 aligment">
-                    <h3>Hope Emerges: An Exhibition</h3>
-                    
-                    <p class="eventdetails">
-                    	<img class="eventicon" src="static/img/clock.jpg" />Friday 30 May 6 – 7.30pm<br />
-						<img class="eventicon" src="static/img/location.jpg" />Museum of the Vernacular, Devonport <a href="https://www.google.com/maps/place/16+Kerr+St/@-36.8283194,174.7988347,17z/data=!3m1!4b1!4m2!3m1!1s0x6d0d37c366a3fc49:0x818f1eca734a2f3d" target="_blank">(View Map)</a>
-					</p>
-
-	<p>Hope Emerges is an exhibition from photographer Lara Boddington, showcasing the beautiful female form after breast cancer. In these intimate images, shot against the backdrop of New Zealand's glorious landscape, women tell their stories through the medium of the camera lens. <a href="https://www.facebook.com/events/1482430595302629/" target="_blank">More...</a>
-                    </p>
-                    
-                    <p> <a style="margin-top:20px;" class="btn btn-inverse" href="https://www.facebook.com/events/1482430595302629/" target="_blank">RSVP</a></p>
-                </div>
-                <div class="col-sm-6">
-					<p style="text-align: center;">Proudly Sponsored By</p>
-					<p style="text-align: center;">
-						<img class="sponsorlogo" src="static/img/sponsors/lbgrey.jpg" />
-						<img class="sponsorlogo" src="static/img/sponsors/nwgrey.jpg" />
-						<img class="sponsorlogo" src="static/img/sponsors/akfpgrey.jpg" />
-						<img class="sponsorlogo" src="static/img/sponsors/dpgrey.jpg" />
-						<img class="sponsorlogo" src="static/img/sponsors/fxgrey.jpg" />
-					</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="contacts-4 groupshot">
-    <div class="container">
-        <div class="content" style="height:300px;">
-
-        </div>
-    </div>
-</section>
-
-
-<section class="content-19">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-7">
-                <div class="quote">
-                    <div class="quote-text">
-                        I think what you've done is amazing. Your photos show reality that is often hidden and taboo. Thanks for sharing your journey with us all.
-                    </div>
-                    <div class="quote-author">
-                        <div class="quote-author-photo"></div>
-                        <div class="quote-author-name">
-                            Trish Monk
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-sm-offset-1">
-                <div class="quote">
-                    <div class="quote-author">
-                        <div class="quote-author-photo"></div>
-                        <div class="quote-author-name">@waynewright</div>
-                    </div>
-                    <div class="quote-date">25 MINUTES AGO</div>
-                    <div class="quote-text">Well done Nic, you are a brave woman that should be admired by all.</div>
-                </div>
-                <div class="quote">
-                    <div class="quote-author">
-                        <div class="quote-author-photo"></div>
-                        <div class="quote-author-name">@judirogers</div>
-                    </div>
-                    <div class="quote-date">1 HOUR AGO</div>
-                    <div class="quote-text">Well done for your courage. You have so much strength and your message is so positive. XX</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="content-37">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-                <h3>Keep in touch...</h3>
-
-                <div class="signup-form">
-                    <form action="http://tbatch.createsend.com/t/d/s/vldir/" method="post">
-                        <div class="clearfix">
-                            <input id="fieldName" name="cm-name" type="text" class="form-control" placeholder="Your Name">
-							<input id="fieldbuytt" name="cm-f-buytt" type="text" class="form-control" placeholder="Your City">
-							<input id="fieldEmail" name="cm-vldir-vldir" type="email" class="form-control" placeholder="Your Email">
-                            <button type="submit" class="btn btn-inverse">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                         
-                
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="crew-1" id="credits">
-    <div class="container">
-        <h3>Credits</h3>
-        
-
-        <div class="members">
-            <div class="member-wrapper">
-                <div class="member">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/simonpic.jpg" alt=""></div>
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="name">Simon Temple</div>
-                        Film Maker
-                    </div>
-                </div>
-            </div>
-
-            <div class="member-wrapper">
-                <div class="member">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/larapic.jpg" alt=""></div>
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="name">Lara Boddington</div>
-                        Photographer
-                    </div>
-                </div>
-            </div>
-
-            <div class="member-wrapper">
-                <div class="member">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/leannepic.jpg" alt=""></div>
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="name">Leanne Rose</div>
-                        Hair & Make Up
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="members">
-            <div class="member-wrapper">
-                <div class="member">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/tompic.jpg" alt=""></div>
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="name">Tom Batcheler</div>
-                        Web Design
-                    </div>
-                </div>
-            </div>
-
-            <div class="member-wrapper">
-                <div class="member">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/joypic.jpg" alt=""></div>
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="name">Joy Snook</div>
-                        Web Hosting Support
-                    </div>
-                </div>
-            </div>
-
-            <div class="member-wrapper">
-                <div class="member">
-                    <div class="photo-wrapper">
-                        <div class="photo"><img src="static/img/nicpic.jpg" alt=""></div>
-                        <div class="overlay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="name">Nic Russell</div>
-                        Hope Emerges Organiser
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--/.container-->
-</section>
-
-<section class="contacts-4 contactlinks">
-    <div class="container">
-        <div class="content">
-            <div class="social-btns">
-                <a href="http://vimeo.com/79454104">
-                    <div class="fui-vimeo"></div>
-                    <div class="fui-vimeo"></div>
-                </a>
-                <a href="http://www.facebook.com/hopeemerges">
-                    <div class="fui-facebook"></div>
-                    <div class="fui-facebook"></div>
-                </a>
-                <a href="http://www.pinterest.com/hopeemerges/">
-                    <div class="fui-pinterest"></div>
-                    <div class="fui-pinterest"></div>
-                </a>
-				<a href="https://twitter.com/hopeemerges">
-                    <div class="fui-twitter"></div>
-                    <div class="fui-twitter"></div>
-                </a>
-            </div>
-            <h3>Get in touch</h3>
-            <p>We'd love to hear your story.</p>
-            <div class="links">
-                <a href="mailto:hello@hopeemerges.co.nz">hello@hopeemerges.co.nz</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<footer class="footer-11">
-    <div class="container">
-        <a class="brand" href="#">
-            <img src="static/img/tinylogo.jpg" alt="">
-        </a>
-        <nav>
-            <ul class="top-menu">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#gallery">Gallery</a></li>
-                        <li><a href="#about">About</a></li>
-						<li><a href="#events">Events</a></li>
-                        <li><a href="#blog" target="_blank">Blog</a></li>
-                        <li><a href="#credits">Credits</a></li>              
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-transition="none" data-icon="home">Home</a></li>
+                <li><a href="#startTracking" data-transition="none" data-icon="plus">Track Workout</a></li>
+                <li><a href="#history" data-transition="none" data-icon="star">History</a></li>
             </ul>
-        </nav>
-        <div class="social-btns">
-            <a href="http://vimeo.com/79454104">
-                <div class="fui-vimeo"></div>
-                <div class="fui-vimeo"></div>
-            </a>
-            <a href="https://www.facebook.com/hopeemerges">
-                <div class="fui-facebook"></div>
-                <div class="fui-facebook"></div>
-            </a>
-                <a href="http://www.pinterest.com/hopeemerges/">
-                    <div class="fui-pinterest"></div>
-                    <div class="fui-pinterest"></div>
-                </a>
-            <a href="https://twitter.com/hopeemerges">
-                <div class="fui-twitter"></div>
-                <div class="fui-twitter"></div>
-            </a>
         </div>
     </div>
-    <div class="additional-links">
-        <div class="container">
-            <p class="lead">Made with love in New Zealand</p>
-        </div>
+
+    <div data-role="content">	
+        <p id="tracks_recorded"></p>
+        
+        <ul data-role="listview" id="history_tracklist">
+
+        </ul>
     </div>
-</footer>            <!-- Placed at the end of the document so the pages load faster -->
 
 
-            <script src="startup/common-files/js/jquery-1.10.2.min.js"></script>
-            <script src="startup/common-files/js/jquery.bxslider.min.js"></script>
-            <script src="startup/common-files/js/jquery.scrollTo-1.4.3.1-min.js"></script>
-            <script src="startup/flat-ui/js/bootstrap.min.js"></script>
-            <script src="startup/common-files/js/masonry.pkgd.min.js"></script>
-            <script src="startup/common-files/js/modernizr.custom.js"></script>
-            <script src="startup/common-files/js/page-transitions.js"></script>
-            <script src="startup/common-files/js/easing.min.js"></script>
-            <script src="startup/common-files/js/jquery.svg.js"></script>
-            <script src="startup/common-files/js/jquery.svganim.js"></script>
-            <script src="startup/common-files/js/jquery.backgroundvideo.min.js"></script>
-            <script src="startup/common-files/js/froogaloop.min.js"></script>
-            <script src="startup/common-files/js/startup-kit.js"></script>
-            <script src="static/nivo/nivo-lightbox.js"></script>
-            <script src="static/js/script.js"></script>
-            
-        </div>
-    </body>
+</div><!-- /page -->
+
+<!-- Track Info page -->
+<div data-role="page" id="track_info">
+
+	<div data-role="header">
+		<h1>Viewing Single Workout</h1>
+		
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#home" data-transition="none" data-icon="home">Home</a></li>
+				<li><a href="#startTracking" data-transition="none" data-icon="plus">Track Workout</a></li>
+				<li><a href="#history" data-transition="none" data-icon="star">History</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">	
+		<p id="track_info_info"></p>
+		
+		<div id="map_canvas" style="position:absolute;bottom:0;left:0;width:100%;height:300px;"></div>
+		
+	</div>
+
+
+</div><!-- /page -->
+
+
+</body>
 </html>
